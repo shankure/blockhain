@@ -67,12 +67,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 // ── CORS (for React frontend) ─────────────────────────────────────────────────
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowFrontend", policy =>
+//        policy.WithOrigins("http://localhost:5173")   // Vite default port
+//              .AllowAnyHeader()
+//              .AllowAnyMethod());
+//});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins("http://localhost:5173")   // Vite default port
-              .AllowAnyHeader()
-              .AllowAnyMethod());
+        policy.WithOrigins(
+            "http://localhost:5173",
+            "https://securetrace-ui.onrender.com"  // ← add your actual frontend URL
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 });
 
 // ── Controllers & Swagger ─────────────────────────────────────────────────────
