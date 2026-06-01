@@ -11,9 +11,21 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Database: SQL Server (EF Core) ───────────────────────────────────────────
+// ── Database: NpgSQL Server (EF Core) ───────────────────────────────────────────
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+    var connStr = builder.Configuration.GetConnectionString("Postgres")
+    ?? Environment.GetEnvironmentVariable("ConnectionStrings__Postgres")
+    ?? throw new InvalidOperationException("Postgres connection string not found.");
+
+// Render provides DATABASE_URL in postgresql:// format — convert it for Npgsql
+if (connStr.StartsWith("postgresql://") || connStr.StartsWith("postgres://"))
+{
+    var uri = new Uri(connStr);
+    var userInfo = uri.UserInfo.Split(':');
+    connStr = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+}
+
+options.UseNpgsql(connStr)
 
 // ── Database: MongoDB (Audit Ledger) ─────────────────────────────────────────
 builder.Services.AddSingleton<MongoDbContext>();
