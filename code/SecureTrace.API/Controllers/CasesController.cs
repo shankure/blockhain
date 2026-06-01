@@ -19,7 +19,6 @@ public class CasesController : ControllerBase
         _caseRepo = caseRepo;
     }
 
-    // ── GET /api/cases ────────────────────────────────────────────────────────
     // All authenticated roles can view cases
     [HttpGet]
     [Authorize(Roles = "Admin,User,Auditor")]
@@ -30,7 +29,6 @@ public class CasesController : ControllerBase
         return Ok(response);
     }
 
-    // ── GET /api/cases/{id} ───────────────────────────────────────────────────
     [HttpGet("{id:int}")]
     [Authorize(Roles = "Admin,User,Auditor")]
     public async Task<IActionResult> GetById(int id)
@@ -40,7 +38,6 @@ public class CasesController : ControllerBase
         return Ok(ToResponse(c));
     }
 
-    // ── POST /api/cases ───────────────────────────────────────────────────────
     // Only Admins can create cases
     [HttpPost]
     [Authorize(Roles = "Admin")]
@@ -63,7 +60,6 @@ public class CasesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ToResponse(created));
     }
 
-    // ── PUT /api/cases/{id} ───────────────────────────────────────────────────
     // Only Admins can update cases
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Admin")]
@@ -84,7 +80,6 @@ public class CasesController : ControllerBase
         return Ok(ToResponse(updated));
     }
 
-    // ── DELETE /api/cases/{id} ────────────────────────────────────────────────
     // Only Admins can delete cases
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin")]
@@ -95,7 +90,7 @@ public class CasesController : ControllerBase
         return NoContent();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    //Helpers
 
     private int? GetCurrentUserId()
     {

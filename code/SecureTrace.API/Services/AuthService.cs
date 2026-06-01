@@ -60,7 +60,7 @@ public class AuthService : IAuthService
         var user = await _db.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email.ToLowerInvariant());
 
-        // 2. Verify password — same error message for both cases to prevent user enumeration
+        // 2. Verify password, same error message for both cases to prevent user enumeration
         if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             throw new UnauthorizedAccessException("Invalid email or password.");
 
@@ -71,7 +71,7 @@ public class AuthService : IAuthService
         return BuildAuthResponse(user); // Take this newly created user and prepare the login/token response.
     }
 
-    // ── Private helpers ───────────────────────────────────────────────────────
+    // Private helpers 
 
     private AuthResponse BuildAuthResponse(User user)
     {

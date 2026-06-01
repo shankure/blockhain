@@ -6,7 +6,6 @@ using SecureTrace.API.Services.Interfaces;
 
 namespace SecureTrace.API.Services;
 
-/// <summary>
 /// The chain verification engine.
 ///
 /// How it works:
@@ -18,7 +17,6 @@ namespace SecureTrace.API.Services;
 ///      → If they differ, a block was inserted, deleted, or reordered
 ///   5. If ALL checks pass → chain is intact
 ///      If ANY check fails → chain is compromised, report exactly which block
-/// </summary>
 public class VerificationService : IVerificationService
 {
     private readonly MongoDbContext       _mongo;

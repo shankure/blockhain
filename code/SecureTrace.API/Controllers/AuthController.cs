@@ -15,10 +15,8 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    /// <summary>
     /// Register a new user. Role must be "Admin", "User", or "Auditor".
     /// Returns a JWT token on success.
-    /// </summary>
     [HttpPost("register")]
     [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -40,10 +38,8 @@ public class AuthController : ControllerBase
         }
     }
 
-    /// <summary>
     /// Login with email and password.
     /// Returns a JWT token to use as: Authorization: Bearer {token}
-    /// </summary>
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
