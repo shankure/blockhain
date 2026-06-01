@@ -2,8 +2,12 @@ import axios from 'axios';
 
 // Base URL points to your .NET API
 // When deployed to Azure, this will be overridden by environment variable
+//const api = axios.create({
+ // baseURL: 'https://localhost:63094', // ← your local API port
+//});
+
 const api = axios.create({
-  baseURL: 'https://localhost:63094', // ← your local API port
+  baseURL: import.meta.env.VITE_API_URL || 'https://securetrace-api.onrender.com',
 });
 
 // Interceptor: automatically attach the JWT token to every request
