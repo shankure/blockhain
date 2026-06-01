@@ -11,21 +11,26 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Database: NpgSQL Server (EF Core) ───────────────────────────────────────────
-builder.Services.AddDbContext<AppDbContext>(options =>
-    var connStr = builder.Configuration.GetConnectionString("Postgres")
-    ?? Environment.GetEnvironmentVariable("ConnectionStrings__Postgres")
+// ── Database: PostgreSQL (EF Core) ────────────────────────────────────────────
+var rawConnStr = builder.Configuration.GetConnectionString("Postgres")
     ?? throw new InvalidOperationException("Postgres connection string not found.");
 
-// Render provides DATABASE_URL in postgresql:// format — convert it for Npgsql
-if (connStr.StartsWith("postgresql://") || connStr.StartsWith("postgres://"))
+// Render provides connection string in postgresql:// URL format
+// Npgsql requires Host=...;Port=...;Database=... format — convert here
+string pgConnStr;
+if (rawConnStr.StartsWith("postgresql://") || rawConnStr.StartsWith("postgres://"))
 {
-    var uri = new Uri(connStr);
+    var uri = new Uri(rawConnStr);
     var userInfo = uri.UserInfo.Split(':');
-    connStr = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+    pgConnStr = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+}
+else
+{
+    pgConnStr = rawConnStr;
 }
 
-options.UseNpgsql(connStr)
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(pgConnStr));
 
 // ── Database: MongoDB (Audit Ledger) ─────────────────────────────────────────
 builder.Services.AddSingleton<MongoDbContext>();
