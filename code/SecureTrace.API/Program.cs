@@ -11,18 +11,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Database: PostgreSQL (EF Core) ────────────────────────────────────────────
+// Postgres
 var rawConnStr = builder.Configuration.GetConnectionString("Postgres")
     ?? throw new InvalidOperationException("Postgres connection string not found.");
 
-// Render provides connection string in postgresql:// URL format
-// Npgsql requires Host=...;Port=...;Database=... format — convert here
 string pgConnStr;
 if (rawConnStr.StartsWith("postgresql://") || rawConnStr.StartsWith("postgres://"))
 {
     var uri = new Uri(rawConnStr);
     var userInfo = uri.UserInfo.Split(':');
-    pgConnStr = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+    var port = uri.Port > 0 ? uri.Port : 5432; // default PostgreSQL port if not specified
+    pgConnStr = $"Host={uri.Host};Port={port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={Uri.UnescapeDataString(userInfo[1])};SSL Mode=Require;Trust Server Certificate=true";
 }
 else
 {
