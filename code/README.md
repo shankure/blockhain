@@ -4,6 +4,9 @@
 
 ![Build Status](https://github.com/shankure/blockchain/actions/workflows/deploy.yml/badge.svg)
 
+> **Note:** The live deployment URLs were active during the presentation period. 
+> The services have been undeployed after the project demonstration.
+
 ---
 
 ## 📋 Table of Contents

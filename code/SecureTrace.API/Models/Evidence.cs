@@ -6,14 +6,10 @@ public class Evidence
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 
-    /// <summary>
     /// Type values: "Photo", "Video", "Document", "Other"
-    /// </summary>
     public string EvidenceType { get; set; } = "Other";
 
-    /// <summary>
     /// Path or URL to the stored file (e.g. Azure Blob, local path)
-    /// </summary>
     public string FileReference { get; set; } = string.Empty;
 
     public DateTime CollectedAt { get; set; } = DateTime.UtcNow;

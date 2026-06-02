@@ -21,11 +21,9 @@ public class AuditController : ControllerBase
         _mongo               = mongo;
     }
 
-    /// <summary>
     /// Verifies the entire cryptographic chain in MongoDB.
     /// Re-computes every hash and checks every link.
     /// All three roles can run this — it is the Auditor's primary tool.
-    /// </summary>
     [HttpGet("verify")]
     [Authorize(Roles = "Admin,User,Auditor")]
     public async Task<IActionResult> Verify()
@@ -38,10 +36,8 @@ public class AuditController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
     /// Returns all audit blocks ordered by BlockIndex ascending.
     /// Used by the frontend to render the ledger visualization.
-    /// </summary>
     [HttpGet("blocks")]
     [Authorize(Roles = "Admin,User,Auditor")]
     public async Task<IActionResult> GetBlocks()

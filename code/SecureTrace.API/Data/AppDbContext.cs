@@ -15,7 +15,7 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // ── User ─────────────────────────────────────────────────────────────
+        // User
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
@@ -25,7 +25,7 @@ public class AppDbContext : DbContext
             entity.Property(u => u.Role).HasMaxLength(16).IsRequired();
         });
 
-        // ── Case ─────────────────────────────────────────────────────────────
+        // Case
         modelBuilder.Entity<Case>(entity =>
         {
             entity.HasKey(c => c.Id);
@@ -40,7 +40,7 @@ public class AppDbContext : DbContext
                   .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // ── Evidence ─────────────────────────────────────────────────────────
+        // Evidence
         modelBuilder.Entity<Evidence>(entity =>
         {
             entity.HasKey(e => e.Id);

@@ -7,9 +7,7 @@ public class Case
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 
-    /// <summary>
     /// Status values: "Open", "Closed", "Archived"
-    /// </summary>
     public string Status { get; set; } = "Open";
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

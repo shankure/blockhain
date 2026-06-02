@@ -27,7 +27,7 @@ public class EvidenceController : ControllerBase
         _auditService = auditService;
     }
 
-    // ── GET /api/evidence ─────────────────────────────────────────────────────
+    //  GET /api/evidence
     [HttpGet]
     [Authorize(Roles = "Admin,User,Auditor")]
     public async Task<IActionResult> GetAll()
@@ -36,7 +36,7 @@ public class EvidenceController : ControllerBase
         return Ok(evidences.Select(ToResponse));
     }
 
-    // ── GET /api/evidence/case/{caseId} ───────────────────────────────────────
+    // GET /api/evidence/case/{caseId}
     [HttpGet("case/{caseId:int}")]
     [Authorize(Roles = "Admin,User,Auditor")]
     public async Task<IActionResult> GetByCase(int caseId)
@@ -48,7 +48,7 @@ public class EvidenceController : ControllerBase
         return Ok(evidences.Select(ToResponse));
     }
 
-    // ── GET /api/evidence/{id} ────────────────────────────────────────────────
+    // GET /api/evidence/{id}
     [HttpGet("{id:int}")]
     [Authorize(Roles = "Admin,User,Auditor")]
     public async Task<IActionResult> GetById(int id)
@@ -58,7 +58,7 @@ public class EvidenceController : ControllerBase
         return Ok(ToResponse(evidence));
     }
 
-    // ── POST /api/evidence ────────────────────────────────────────────────────
+    // POST /api/evidence
     [HttpPost]
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> Create([FromBody] CreateEvidenceRequest request)
@@ -90,7 +90,7 @@ public class EvidenceController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ToResponse(created));
     }
 
-    // ── PUT /api/evidence/{id} ────────────────────────────────────────────────
+    // PUT /api/evidence/{id}
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateEvidenceRequest request)
@@ -108,7 +108,7 @@ public class EvidenceController : ControllerBase
 
         if (updated is null) return NotFound(new { message = $"Evidence {id} not found." });
 
-        // ── Append audit block for the update ─────────────────────────────────
+        // Append audit block for the update
         // Every update creates a new block. This means the ledger records
         // the FULL history of changes, not just the current state.
         await _auditService.AppendBlockAsync(updated, "UPDATED", actorEmail ?? "unknown");
@@ -116,7 +116,7 @@ public class EvidenceController : ControllerBase
         return Ok(ToResponse(updated));
     }
 
-    // ── DELETE /api/evidence/{id} ─────────────────────────────────────────────
+    // DELETE /api/evidence/{id}
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
@@ -126,7 +126,7 @@ public class EvidenceController : ControllerBase
         return NoContent();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // Helpers
 
     private int? GetCurrentUserId()
     {

@@ -30,7 +30,7 @@ public class VerificationService : IVerificationService
 
     public async Task<VerificationResult> VerifyChainAsync()
     {
-        // ── Step 1: Load all blocks ordered by BlockIndex ascending ───────────
+        // Step 1: Load all blocks ordered by BlockIndex ascending
         //
         // We MUST process them in order — block 1, then 2, then 3, etc.
         // Sorting by BlockIndex ascending guarantees this.
@@ -40,7 +40,7 @@ public class VerificationService : IVerificationService
             .SortBy(b => b.BlockIndex)
             .ToListAsync();
 
-        // ── Step 2: Handle empty ledger ───────────────────────────────────────
+        // Step 2: Handle empty ledger 
         if (allBlocks.Count == 0)
         {
             return new VerificationResult(
@@ -51,7 +51,7 @@ public class VerificationService : IVerificationService
             );
         }
 
-        // ── Step 3: Verify each block ─────────────────────────────────────────
+        // Step 3: Verify each block
         var details      = new List<BlockVerificationDetail>();
         var chainIsValid = true;
 
@@ -61,8 +61,7 @@ public class VerificationService : IVerificationService
             var blockIsValid   = true;
             var failureReason  = (string?)null;
 
-            // ── Check A: Re-compute the hash and compare ──────────────────────
-            //
+            // Check A: Re-compute the hash and compare
             // We rebuild the exact same payload string that was used when
             // this block was originally created in AuditService.AppendBlockAsync.
             // If even ONE character in the stored fields was changed,
@@ -89,7 +88,7 @@ public class VerificationService : IVerificationService
                                 $"Stored: {block.CurrentHash}";
             }
 
-            // ── Check B: Verify PreviousHash linkage ──────────────────────────
+            // Check B: Verify PreviousHash linkage
             //
             // For the genesis block (index 1), PreviousHash must be the
             // conventional "0000000000000000" marker.
@@ -135,7 +134,7 @@ public class VerificationService : IVerificationService
             ));
         }
 
-        // ── Step 4: Build the final result ────────────────────────────────────
+        // Step 4: Build the final result
         var message = chainIsValid
             ? $"✅ Chain verified. All {allBlocks.Count} blocks are intact and unmodified."
             : $"🚨 TAMPER DETECTED. {details.Count(d => !d.IsValid)} block(s) failed verification.";
